@@ -69,7 +69,7 @@ if [[ -z "$(docker ps)" ]] ;  then
     print_error "Unable to run docker commands. If you have recently added |$USER| to 'docker' group, you may need to log out and log back in for it to take effect."
     print_error "Otherwise, please check your Docker installation."
     exit 1
-fi    
+fi
 
 # Check if git-lfs is installed.
 if [[ -z "$(git lfs)" ]] ; then
@@ -84,7 +84,7 @@ for (( i=0; i<${#LFS_FILES_STATUS}; i++ )); do
   if [[ "$f" == "-" ]]; then
       print_error "LFS files are missing. Please re-clone the repo after you installing git-lfs."
       exit 1
-  fi  
+  fi
 done
 
 PLATFORM="$(uname -m)"
@@ -164,6 +164,8 @@ docker run -it --rm \
     -v $ISAAC_ROS_DEV_DIR:/workspaces/isaac_ros-dev \
     -v /dev/shm:/dev/shm \
     -v /dev/*:/dev/* \
+    -v /dev/bus/usb:/dev/bus/usb \
+    --device-cgroup-rule='c 189:* rmw' \
     --name "$CONTAINER_NAME" \
     --runtime nvidia \
     --user="admin" \
