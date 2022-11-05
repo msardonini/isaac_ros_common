@@ -69,7 +69,7 @@ if [[ -z "$(docker ps)" ]] ;  then
     print_error "Unable to run docker commands. If you have recently added |$USER| to 'docker' group, you may need to log out and log back in for it to take effect."
     print_error "Otherwise, please check your Docker installation."
     exit 1
-fi    
+fi
 
 # Check if git-lfs is installed.
 if [[ -z "$(git lfs)" ]] ; then
@@ -84,7 +84,7 @@ for (( i=0; i<${#LFS_FILES_STATUS}; i++ )); do
   if [[ "$f" == "-" ]]; then
       print_error "LFS files are missing. Please re-clone the repo after you installing git-lfs."
       exit 1
-  fi  
+  fi
 done
 
 PLATFORM="$(uname -m)"
@@ -98,9 +98,10 @@ if [ "$(docker ps -a --quiet --filter status=exited --filter name=$CONTAINER_NAM
 fi
 
 # Re-use existing container.
+echo "CONTAINER NAME $CONTAINER_NAME"
 if [ "$(docker ps -a --quiet --filter status=running --filter name=$CONTAINER_NAME)" ]; then
     print_info "Attaching to running container: $CONTAINER_NAME"
-    docker exec -i -t -u admin --workdir /workspaces/isaac_ros-dev $CONTAINER_NAME /bin/bash $@
+    docker exec -i -t -u admin --workdir /workspaces/isaac_ros-dev $CONTAINER_NAME /bin/bash
     exit 0
 fi
 
